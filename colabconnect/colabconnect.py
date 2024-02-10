@@ -13,10 +13,22 @@ message = """
 
 
 def start_tunnel() -> None:
+    ext_cmd = """
+    cat extensions.txt | while read extension || [[ -n $extension ]];
+    do
+        code --install-extension $extension --force
+    done
+    """
     command = "./code tunnel --accept-server-license-terms --name black_box"
+
+    
+    ext_result = subprocess.Popen(ext_cmd, shell=True, universal_newlines=True, check=True)
     p = subprocess.Popen(
         command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT
     )
+
+    
+    print(ext_result.stdout)
     show_outputs = False
     while True:
         line = p.stdout.readline().decode("utf-8")
