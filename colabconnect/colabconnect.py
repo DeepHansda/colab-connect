@@ -3,13 +3,15 @@ import subprocess
 from importlib import import_module
 import time
 import sys
-
+import os 
 
 message = """
 - Ready!
 - Open VSCode on your laptop and open the command prompt
 - Select: 'Remote-Tunnels: Connect to Tunnel' to connect to colab
 """.strip()
+
+
 
 
 def start_tunnel() -> None:
@@ -21,9 +23,13 @@ def start_tunnel() -> None:
     
     
     #install vs-code extensions
-    shellscript = subprocess.Popen(["vscode-extension-install.sh"], stdin=subprocess.PIPE,stdout=subprocess.PIPE)
-    shellscript.communicate("yes/n")
-    shellscript.returncode
+    extension_file_path = os.path.join(os.getcwd(),"colabconnect/extensions.txt")
+    with open(extension_file_path,'r') as extension_install:
+        for extension in extension_install:
+            shellscript = subprocess.Popen(f"./code --install-extension {extension} --force",shell=True, stdout=subprocess.PIPE,stderr=subprocess.STDOUT)
+            log = shellscript.stdout.readline().decode("utf-8")
+            print(log.strip())
+    
     
     
     
