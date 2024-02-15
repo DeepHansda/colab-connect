@@ -3,7 +3,7 @@ import subprocess
 from importlib import import_module
 import time
 import sys
-import os 
+
 
 message = """
 - Ready!
@@ -12,27 +12,11 @@ message = """
 """.strip()
 
 
-
-
 def start_tunnel() -> None:
     command = "./code tunnel --accept-server-license-terms --random-name"
     p = subprocess.Popen(
         command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT
     )
-    
-    
-    
-    #install vs-code extensions
-    extension_file_path = os.path.join(os.getcwd(),"colabconnect/extensions.txt")
-    with open(extension_file_path,'r') as extension_install:
-        for extension in extension_install:
-            shellscript = subprocess.Popen(f"./code --install-extension {extension} --force",shell=True, stdout=subprocess.PIPE,stderr=subprocess.STDOUT)
-            log = shellscript.stdout.readline().decode("utf-8")
-            print(log.strip())
-    
-    
-    
-    
     show_outputs = False
     while True:
         line = p.stdout.readline().decode("utf-8")
